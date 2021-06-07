@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import ru.abs.base.BaseScreen;
 import ru.abs.math.Rect;
 import ru.abs.sprite.Background;
+import ru.abs.sprite.Spaceship;
 import ru.abs.sprite.Star;
 
 public class GameScreen extends BaseScreen {
@@ -19,6 +20,8 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private Star[] stars;
 
+    private Spaceship spaceship;
+
     @Override
     public void show() {
         super.show();
@@ -29,6 +32,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
+        spaceship = new Spaceship(atlas);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.resize(worldBounds);
         }
+        spaceship.resize(worldBounds);
     }
 
     @Override
@@ -57,6 +62,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
+        spaceship.update(delta);
     }
 
     private void draw() {
@@ -66,6 +72,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        spaceship.draw(batch);
         batch.end();
     }
 }

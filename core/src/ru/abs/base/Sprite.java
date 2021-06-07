@@ -1,6 +1,7 @@
 package ru.abs.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,6 +17,22 @@ public class Sprite extends Rect {
     public Sprite(TextureRegion region) {
         regions = new TextureRegion[1];
         regions[0] = region;
+    }
+
+    public Sprite(TextureRegion region, int rows, int cols, int frames) {
+        if(region == null) throw new RuntimeException("Split null region");
+        regions = new TextureRegion[frames];
+        int tileWidth = region.getRegionWidth() / cols;
+        int tileHeight = region.getRegionHeight() / rows;
+
+        int frame = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                regions[frame] = new TextureRegion(region, tileWidth * j, tileHeight * i, tileWidth, tileHeight);
+                if(frame == frames - 1);
+                frame++;
+            }
+        }
     }
 
     /**
