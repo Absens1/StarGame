@@ -1,11 +1,11 @@
 package ru.abs.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.abs.math.Rect;
+import ru.abs.utils.Regions;
 
 public class Sprite extends Rect {
 
@@ -13,6 +13,10 @@ public class Sprite extends Rect {
     protected float scale = 1;
     protected TextureRegion[] regions;
     protected int frame;
+    protected boolean destroyed;
+
+    public Sprite() {
+    }
 
     public Sprite(TextureRegion region) {
         regions = new TextureRegion[1];
@@ -20,19 +24,7 @@ public class Sprite extends Rect {
     }
 
     public Sprite(TextureRegion region, int rows, int cols, int frames) {
-        if(region == null) throw new RuntimeException("Split null region");
-        regions = new TextureRegion[frames];
-        int tileWidth = region.getRegionWidth() / cols;
-        int tileHeight = region.getRegionHeight() / rows;
-
-        int frame = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                regions[frame] = new TextureRegion(region, tileWidth * j, tileHeight * i, tileWidth, tileHeight);
-                if(frame == frames - 1);
-                frame++;
-            }
-        }
+        regions = Regions.split(region, rows, cols, frames);
     }
 
     /**
@@ -90,5 +82,17 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void destroy() {
+        destroyed = true;
+    }
+
+    public void flushDestroy() {
+        destroyed = false;
     }
 }
