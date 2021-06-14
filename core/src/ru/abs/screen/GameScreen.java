@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.List;
+
 import ru.abs.base.BaseScreen;
 import ru.abs.math.Rect;
 import ru.abs.pool.BulletPool;
 import ru.abs.pool.EnemyPool;
 import ru.abs.sprite.Background;
+import ru.abs.sprite.EnemyShip;
 import ru.abs.sprite.MainShip;
 import ru.abs.sprite.Star;
 import ru.abs.utils.EnemyEmitter;
@@ -61,10 +64,22 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         update(delta);
+        checkEnemyShips();
         freeAllDestroyed();
         draw();
     }
 
+    private void checkEnemyShips() {
+        List<EnemyShip> enemyShipList = enemyPool.getActiveObjects();
+        for (EnemyShip enemyShip : enemyShipList) {
+            if (enemyShip.isDestroyed()) {
+                continue;
+            }
+            if (!enemyShip.isOutside(mainShip)) {
+                enemyShip.destroy();
+            }
+        }
+    }
 
     @Override
     public void resize(Rect worldBounds) {
