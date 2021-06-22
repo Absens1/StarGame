@@ -23,6 +23,9 @@ public class NewGameButton extends ScaledButton {
 
     @Override
     public void update(float delta) {
+        if (pressed) {
+            return;
+        }
         animateTimer += delta;
         if (animateTimer > ANIMATE_INTERVAL) {
             animateTimer = 0f;

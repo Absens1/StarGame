@@ -12,7 +12,7 @@ import ru.abs.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
-    private static final int HP = 10;
+    private static final int HP = 100;
 
     private static final float HEIGHT = 0.15f;
     private static final float PADDING = 0.05f;
@@ -39,6 +39,17 @@ public class MainShip extends Ship {
         bulletHeight = 0.01f;
         damage = 1;
         hp = HP;
+    }
+
+    public void startNewGame() {
+        this.hp = HP;
+        this.pos.x = worldBounds.pos.x;
+        stop();
+        pressedLeft = false;
+        pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+        flushDestroy();
     }
 
     @Override
@@ -153,17 +164,6 @@ public class MainShip extends Ship {
                 break;
         }
         return false;
-    }
-
-    public void startNewGame() {
-        this.hp = HP;
-        this.pos.x = worldBounds.pos.x;
-        stop();
-        pressedLeft = false;
-        pressedRight = false;
-        leftPointer = INVALID_POINTER;
-        rightPointer = INVALID_POINTER;
-        flushDestroy();
     }
 
     private void moveRight() {
