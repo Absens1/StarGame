@@ -8,8 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import ru.abs.base.Ship;
 import ru.abs.math.Rect;
 import ru.abs.pool.BulletPool;
+import ru.abs.pool.ExplosionPool;
 
 public class MainShip extends Ship {
+
+    private static final int HP = 10;
 
     private static final float HEIGHT = 0.15f;
     private static final float PADDING = 0.05f;
@@ -22,8 +25,9 @@ public class MainShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
+    public MainShip(TextureAtlas atlas, ExplosionPool explosionPool, BulletPool bulletPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
+        this.explosionPool = explosionPool;
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletSound = bulletSound;
@@ -34,7 +38,7 @@ public class MainShip extends Ship {
         reloadInterval = RELOAD_INTERVAL;
         bulletHeight = 0.01f;
         damage = 1;
-        hp = 100;
+        hp = HP;
     }
 
     @Override
@@ -62,6 +66,15 @@ public class MainShip extends Ship {
 //        if (getRight() < worldBounds.getLeft()) {
 //            setLeft(worldBounds.getRight());
 //        }
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(
+                bullet.getRight() < getLeft()
+                        || bullet.getLeft() > getRight()
+                        || bullet.getBottom() > pos.y
+                        || bullet.getTop() < getBottom()
+        );
     }
 
     @Override
@@ -140,6 +153,17 @@ public class MainShip extends Ship {
                 break;
         }
         return false;
+    }
+
+    public void startNewGame() {
+        this.hp = HP;
+        this.pos.x = worldBounds.pos.x;
+        stop();
+        pressedLeft = false;
+        pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+        flushDestroy();
     }
 
     private void moveRight() {
